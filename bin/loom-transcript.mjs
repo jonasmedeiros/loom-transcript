@@ -135,6 +135,16 @@ async function main() {
   }
 
   let browser
+  async function cleanup() {
+    if (browser) {
+      try { await browser.close() } catch {}
+      browser = null
+    }
+  }
+  process.on("SIGINT", async () => { await cleanup(); process.exit(130) })
+  process.on("SIGTERM", async () => { await cleanup(); process.exit(143) })
+  process.on("uncaughtException", async () => { await cleanup(); process.exit(1) })
+
   try {
     browser = await puppeteer.launch({
       executablePath: chromePath,
@@ -185,7 +195,7 @@ async function main() {
     }
     process.exit(1)
   } finally {
-    if (browser) await browser.close()
+    await cleanup()
   }
 }
 
