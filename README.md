@@ -9,14 +9,19 @@ Extract transcripts from Loom video share URLs.
 
 ## Installation
 
+Run directly from GitHub (no install needed):
+
 ```bash
-npm install -g loom-transcript
+npx github:jonasmedeiros/loom-transcript https://www.loom.com/share/your-video-id
 ```
 
-Or run directly without installing:
+Or clone and install locally:
 
 ```bash
-npx loom-transcript https://www.loom.com/share/your-video-id
+git clone https://github.com/jonasmedeiros/loom-transcript.git
+cd loom-transcript
+npm install
+npm link  # makes 'loom-transcript' available globally
 ```
 
 ## Usage
