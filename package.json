@@ -1,0 +1,24 @@
+{
+  "name": "loom-transcript",
+  "version": "1.0.0",
+  "description": "Extract transcripts from Loom video share URLs",
+  "type": "module",
+  "bin": {
+    "loom-transcript": "bin/loom-transcript.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "loom",
+    "transcript",
+    "video",
+    "captions",
+    "subtitles",
+    "cli"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "puppeteer-core": "^24.0.0"
+  }
+}
