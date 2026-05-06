@@ -41,6 +41,6 @@ Available flags:
 
 ## Notes
 
-- The tool launches a headless Chrome browser — requires Google Chrome installed
+- The tool launches a headless Chromium browser via Playwright (no system Chrome required)
 - Works with any public Loom share link, no Loom account needed
-- If the command fails, check that Chrome is installed and the URL is valid
+- If the command fails, check the URL is valid and your internet connection

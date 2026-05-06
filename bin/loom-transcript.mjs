@@ -1,36 +1,6 @@
 #!/usr/bin/env node
 
-import puppeteer from "puppeteer-core"
-import { existsSync } from "fs"
-import { platform } from "os"
-
-const CHROME_PATHS = {
-  darwin: [
-    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-    "/Applications/Chromium.app/Contents/MacOS/Chromium",
-    "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser",
-  ],
-  linux: [
-    "/usr/bin/google-chrome",
-    "/usr/bin/google-chrome-stable",
-    "/usr/bin/chromium",
-    "/usr/bin/chromium-browser",
-    "/snap/bin/chromium",
-  ],
-  win32: [
-    "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-    "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
-    `${process.env.LOCALAPPDATA}\\Google\\Chrome\\Application\\chrome.exe`,
-  ],
-}
-
-function findChrome() {
-  const paths = CHROME_PATHS[platform()] || []
-  for (const p of paths) {
-    if (existsSync(p)) return p
-  }
-  return null
-}
+import { chromium } from "playwright"
 
 function parseVttToText(vtt) {
   const lines = vtt.split("\n")
@@ -95,9 +65,6 @@ Examples:
   loom-transcript https://www.loom.com/share/abc123def456
   loom-transcript --json https://www.loom.com/share/abc123def456
   loom-transcript --vtt https://www.loom.com/share/abc123def456
-
-Requirements:
-  Google Chrome (or Chromium) must be installed on your machine.
 `)
 }
 
@@ -126,14 +93,6 @@ async function main() {
     process.exit(1)
   }
 
-  const chromePath = findChrome()
-  if (!chromePath) {
-    console.error("Error: Could not find Chrome or Chromium.")
-    console.error(`Looked in: ${(CHROME_PATHS[platform()] || []).join(", ")}`)
-    console.error("Install Google Chrome or set the path manually.")
-    process.exit(1)
-  }
-
   let browser
   async function cleanup() {
     if (browser) {
@@ -146,13 +105,9 @@ async function main() {
   process.on("uncaughtException", async () => { await cleanup(); process.exit(1) })
 
   try {
-    browser = await puppeteer.launch({
-      executablePath: chromePath,
-      headless: "new",
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
-    })
-
-    const page = await browser.newPage()
+    browser = await chromium.launch()
+    const context = await browser.newContext()
+    const page = await context.newPage()
 
     let captionsVtt = null
 
@@ -166,7 +121,7 @@ async function main() {
     })
 
     process.stderr.write("Fetching transcript...")
-    await page.goto(url, { waitUntil: "networkidle2", timeout: 30000 })
+    await page.goto(url, { waitUntil: "networkidle", timeout: 30000 })
 
     // Wait for captions to load (they load async)
     for (let i = 0; i < 10 && !captionsVtt; i++) {

@@ -5,7 +5,6 @@ Extract transcripts from Loom video share URLs.
 ## Requirements
 
 - **Node.js** 18 or later
-- **Google Chrome** (or Chromium) installed on your machine
 
 ## Installation
 
@@ -75,7 +74,7 @@ the client is saying. They're saying that, um,
 
 ## How it works
 
-Loom stores video transcripts behind authenticated CDN URLs. This tool launches a headless Chrome browser using [Puppeteer](https://pptr.dev), navigates to the Loom share page, and intercepts the network response containing the VTT captions file. No Loom account or API key is required — it works with any public share link.
+Loom stores video transcripts behind authenticated CDN URLs. This tool launches a headless Chromium browser using [Playwright](https://playwright.dev), navigates to the Loom share page, and intercepts the network response containing the VTT captions file. No Loom account or API key is required — it works with any public share link.
 
 ## License
 
