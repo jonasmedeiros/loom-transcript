@@ -1,10 +1,11 @@
 {
   "name": "loom-transcript",
   "version": "1.0.0",
-  "description": "Extract transcripts from Loom video share URLs",
+  "description": "Extract transcripts and capture frames from Loom video share URLs",
   "type": "module",
   "bin": {
-    "loom-transcript": "bin/loom-transcript.mjs"
+    "loom-transcript": "bin/loom-transcript.mjs",
+    "loom-watch": "bin/loom-watch.mjs"
   },
   "engines": {
     "node": ">=18"
@@ -15,6 +16,8 @@
     "video",
     "captions",
     "subtitles",
+    "frames",
+    "screenshot",
     "cli"
   ],
   "license": "MIT",
